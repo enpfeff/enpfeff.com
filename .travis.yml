@@ -4,11 +4,10 @@ node_js:
 before_install:
 install:
 - npm i
-- cd ui && npm i && cd ..
 cache:
   directories:
   - node_modules
   - ui/node_modules
 script:
-  - cd ui && npm run build && cd ..
+  - npm run build
   - npm run deploy

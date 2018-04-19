@@ -38,7 +38,8 @@ module.exports = {
       "after": false,
       "overrides": {
         "const": { "after": true, "before": true },
-        "return": { "after": true, "before": true }
+        "return": { "after": true, "before": true },
+        "from": { "after": true, "before": true }
       }
     }],
 

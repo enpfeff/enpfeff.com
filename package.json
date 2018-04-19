@@ -5,9 +5,10 @@
   "main": "",
   "scripts": {
     "postinstall": "cd ./ui && npm i",
-    "clean": "rm -rf ./ui/node_modules ./node_modules",
+    "clean": "rm -rf ./ui/node_modules ./ui/dist ./node_modules",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "deploy": "node ./devops/deploy.js"
+    "deploy": "node ./devops/deploy.js",
+    "build": "cd ./ui && npm run build && cd .."
   },
   "repository": {
     "type": "git",
