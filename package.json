@@ -6,7 +6,8 @@
   "scripts": {
     "postinstall": "cd ./ui && npm i",
     "clean": "rm -rf ./ui/node_modules ./node_modules",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "deploy": "node ./devops/deploy.js"
   },
   "repository": {
     "type": "git",
@@ -29,8 +30,7 @@
     "eslint-plugin-node": "~6.0.1",
     "eslint-plugin-promise": "~3.7.0",
     "eslint-plugin-standard": "~3.0.1",
-    "eslint-plugin-vue": "~4.5.0",
-    "glob": "~7.1.2"
+    "eslint-plugin-vue": "~4.5.0"
   },
   "dependencies": {
     "bluebird": "~3.5.1",

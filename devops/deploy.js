@@ -4,26 +4,22 @@
 const env = require('env2');
 const P = require('bluebird');
 const _ = require('lodash');
-const glob = P.promisify(require('glob'));
 const path = require('path');
 const fs = require('fs');
 const readDir = P.promisify(fs.readdir);
 const AWS = require('aws-sdk');
+let s3 = null;
+module.exports = { entry };
 
-// used in development so i dont share aws secrets
-if(fs.existsSync('.env')) env('.env');
-
-AWS.config = new AWS.Config({
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-    region: process.env.AWS_REGION
-});
-
-const s3 = new AWS.S3({apiVersion: '2006-03-01'});
+// where the UI is being built
 const BUILD_DIR = 'dist';
-
+// where should prod deploy to
+const BUCKET_NAME_PROD = 'enpfeff.com';
+// where should dev deploy to
+const BUCKET_NAME_DEV = 'enpfeff.com';
+// output crap
 const PRETTY_PRINT_SPACER = '\n\t*  ';
-
+// mime types map
 const CONTENT_TYPE_MAP = {
     '.js': 'application/javascript',
     '.html': 'text/html',
@@ -32,41 +28,36 @@ const CONTENT_TYPE_MAP = {
     '.gif': 'image/gif',
     'jpeg': 'image/jpeg'
 };
-
+// how do you want caching to work
 const CACHE_CONTROL_MAP = {
     '.html': 'max-age=0, must-revalidate'
 };
 
+if(require.main === module) entry();
+
 function entry() {
-    const GLOB_OPTIONS = {
-        matchBase: true,
-        cwd: '..',
-        ignore: ['**/node_modules/**'],
-        absolute: true
-    };
+    // used in development so i dont share aws secrets
+    if(fs.existsSync('.env')) env('.env');
 
-    // go find all gulpfiles in this folder
-    // install them and build the dist folder
-    return glob('**/gulpfile.js', GLOB_OPTIONS)
-        .map((path) => getAndUploadDistribution(path));
+    AWS.config = new AWS.Config({
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+        region: process.env.AWS_REGION
+    });
+
+    s3 = new AWS.S3({apiVersion: '2006-03-01'});
+
+    return getAndUploadDistribution('./ui');
 }
 
-function singleEntry(path, branch) {
-    return getAndUploadDistribution(path, branch);
-}
-
-function getAndUploadDistribution(gulpFile, branch) {
-    const dirname = path.dirname(gulpFile);
-    const pkg = require(`${dirname}/package.json`);
-    const { name, meta } = pkg;
-
-    console.log(`Passed in Branch is: ${!branch ? 'undefined' : branch}`);
+function getAndUploadDistribution(uiDir, branch) {
+    const dirname = uiDir;
     const branchName = !branch ? getBranchName() : branch;
     const isProd = branchName === 'prod';
 
     // if its prod then we are pushing to whatever is in the meta of the package json
-    const bucketName = `${isProd ? meta.deploy.prefix.prod : meta.deploy.prefix.dev}${name}`;
-    const directoryPath = `${dirname}/dist`;
+    const bucketName = isProd ? BUCKET_NAME_PROD : BUCKET_NAME_DEV;
+    const directoryPath = `${dirname}/${BUILD_DIR}`;
 
     console.log(`Bucket Name: ${bucketName}`);
     // first we want to remove all items in the bucket
@@ -169,17 +160,13 @@ function getContentType(file) {
 
 // this is specially passed in for the build
 function getBranchName() {
-    const branch = process.argv[2];
-    console.log(`Deploy argument is ${branch}`);
+    let branch = process.argv[2];
+    if(_.isUndefined(branch)) {
+        console.log(`Deploy target is undefined reverting to "dev"`);
+        branch = 'dev';
+        return branch;
+    }
+
+    console.log(`Deploy target is ${branch}`);
     return branch;
-}
-
-
-module.exports = {
-    entry,
-    singleEntry
-};
-
-if(require.main === module) {
-    entry();
 }
