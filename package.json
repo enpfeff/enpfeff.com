@@ -23,7 +23,6 @@
   "devDependencies": {
     "aws-sdk": "~2.224.1",
     "babel-eslint": "~8.2.3",
-    "env2": "~2.2.0",
     "eslint": "~4.19.1",
     "eslint-config-standard": "~11.0.0",
     "eslint-friendly-formatter": "~4.0.1",

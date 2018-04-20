@@ -23,16 +23,14 @@ module.exports = {
   rules: {
     // allow async-await
     'generator-star-spacing': 'off',
-
     // 4 space indent
     'indent': ["error", 4],
-
     // use semi colons
     'semi': [2, "always"],
-
+    // return from assignments return, e.g. return a = a + 2
+    "no-return-assign": "off",
     // spaces are for fools
     "space-before-function-paren": ["error", "never"],
-
     //if() { ... }
     "keyword-spacing": ["error", {
       "after": false,
@@ -42,10 +40,8 @@ module.exports = {
         "from": { "after": true, "before": true }
       }
     }],
-
     // empty lines
     "no-multiple-empty-lines": [2, {"max": 3, "maxEOF": 1}],
-
     // allow debugger during development
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
   }

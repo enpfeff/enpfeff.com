@@ -1,7 +1,6 @@
 /**
  * Created by enpfeff on 2/27/17.
  */
-const env = require('env2');
 const P = require('bluebird');
 const _ = require('lodash');
 const path = require('path');
@@ -50,21 +49,15 @@ function entry() {
 }
 
 function loadEnvironment() {
-    // used in development so i dont share aws secrets also wanted to add comments and things
+    // used in development so i dont share aws secrets
     const ENV_FILE = path.resolve(path.join(__dirname, '..', 'env.js'));
 
     // not in development env
     if(!fs.existsSync(ENV_FILE)) return;
     console.log('Found Env file loading environment');
 
-    // write file out to a json file so env package can read it
     const ENV = require(ENV_FILE);
-    const ENV_JSON_FILE = path.resolve(path.join(__dirname, '..', 'env.json'));
-    fs.writeFileSync(ENV_JSON_FILE, JSON.stringify(ENV), 'utf8');
-    env(ENV_JSON_FILE);
-
-    // now that we've loaded the json file get rid of it.
-    fs.unlinkSync(ENV_JSON_FILE);
+    _.each(ENV, (v, k) => process.env[k] = v);
 }
 
 function getAndUploadDistribution(uiDir, branch) {
