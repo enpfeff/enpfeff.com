@@ -9,7 +9,7 @@ const fs = require('fs');
 const readDir = P.promisify(fs.readdir);
 const AWS = require('aws-sdk');
 let s3 = null;
-module.exports = { entry };
+module.exports = entry;
 
 // where the UI is being built
 const BUILD_DIR = 'dist';
@@ -36,8 +36,7 @@ const CACHE_CONTROL_MAP = {
 if(require.main === module) entry();
 
 function entry() {
-    // used in development so i dont share aws secrets
-    if(fs.existsSync('.env')) env('.env');
+    loadEnvironment();
 
     AWS.config = new AWS.Config({
         accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -48,6 +47,24 @@ function entry() {
     s3 = new AWS.S3({apiVersion: '2006-03-01'});
 
     return getAndUploadDistribution('./ui');
+}
+
+function loadEnvironment() {
+    // used in development so i dont share aws secrets also wanted to add comments and things
+    const ENV_FILE = path.resolve(path.join(__dirname, '..', 'env.js'));
+
+    // not in development env
+    if(!fs.existsSync(ENV_FILE)) return;
+    console.log('Found Env file loading environment');
+
+    // write file out to a json file so env package can read it
+    const ENV = require(ENV_FILE);
+    const ENV_JSON_FILE = path.resolve(path.join(__dirname, '..', 'env.json'));
+    fs.writeFileSync(ENV_JSON_FILE, JSON.stringify(ENV), 'utf8');
+    env(ENV_JSON_FILE);
+
+    // now that we've loaded the json file get rid of it.
+    fs.unlinkSync(ENV_JSON_FILE);
 }
 
 function getAndUploadDistribution(uiDir, branch) {
