@@ -1,12 +1,10 @@
 <template>
-  <v-toolbar app>
+  <v-toolbar app dark>
     <v-toolbar-side-icon @click.stop="updateToolbar"></v-toolbar-side-icon>
     <v-toolbar-title>{{name}}</v-toolbar-title>
     <v-spacer></v-spacer>
     <v-toolbar-items class="hidden-sm-and-down">
-      <v-btn flat>About</v-btn>
-      <v-btn flat>Resume</v-btn>
-      <v-btn flat>Blog</v-btn>
+      <v-btn flat v-for="i in items" :key="i.title">{{i.title}}</v-btn>
     </v-toolbar-items>
   </v-toolbar>
 </template>
@@ -14,7 +12,7 @@
 <script>
 export default {
     name: 'enToolbar',
-    props: [],
+    props: ['items'],
     data() {
         return {
             name: 'Ian Pfeffer'

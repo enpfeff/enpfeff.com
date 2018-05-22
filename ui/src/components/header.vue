@@ -1,13 +1,13 @@
 <template>
   <div id="header">
-    <v-container class="container" fill-height>
+    <v-parallax src="https://assets.enpfeff.com/Dark_mountain_panorama-3.jpg" height="600">
       <v-layout row align-center>
         <v-flex text-xs-center>
           <div class="en-title">Developer.</div>
           <div class="subtext">sub text</div>
         </v-flex>
       </v-layout>
-    </v-container>
+    </v-parallax>
   </div>
 </template>
 
@@ -30,19 +30,6 @@ export default {
   height: 500px;
   width: 100%;
 }
-
-#header:before {
-
-   content: '';
-
-   top: 0;
-   right: 0;
-   bottom: 0;
-   left: 0;
-   background-image: linear-gradient(to bottom right, #222, #424242);
-   opacity: .4;
-}
-
 .subtext {
   color: #fff;
 

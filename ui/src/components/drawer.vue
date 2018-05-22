@@ -4,6 +4,7 @@
     temporary
     v-model="drawer"
     @input="updateDrawer"
+    dark
   >
     <v-toolbar flat>
       <v-list>
@@ -11,6 +12,15 @@
           <v-list-tile-title class="title">
             Menu
           </v-list-tile-title>
+        </v-list-tile>
+
+        <v-list-tile v-for="i in items" :key="i.title">
+          <v-list-tile-action>
+            <v-icon>{{i.icon}}</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>{{i.title}}</v-list-tile-title>
+          </v-list-tile-content>
         </v-list-tile>
       </v-list>
     </v-toolbar>

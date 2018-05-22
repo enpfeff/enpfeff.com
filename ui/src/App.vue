@@ -1,7 +1,7 @@
 <template>
   <v-app>
-    <en-drawer></en-drawer>
-    <en-toolbar></en-toolbar>
+    <en-drawer :items="items"></en-drawer>
+    <en-toolbar :items="items"></en-toolbar>
     <v-content>
         <router-view/>
     </v-content>
@@ -17,7 +17,18 @@ export default {
         enToolbar,
         enDrawer
     },
-    data: () => ({})
+    data: () => ({
+        items: [{
+            title: 'About',
+            icon: 'assignment_ind'
+        }, {
+            title: 'Resume',
+            icon: 'insert_drive_file'
+        }, {
+            title: 'Contact',
+            icon: 'contact_mail'
+        }]
+    })
 };
 </script>
 

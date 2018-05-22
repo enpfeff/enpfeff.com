@@ -1,16 +1,27 @@
 <template>
   <div>
     <en-header />
+    <about></about>
+    <image-parallax></image-parallax>
+    <resume></resume>
+    <contact></contact>
   </div>
 </template>
 
 <script>
-import header from '@/components/header';
-
+import enHeader from '@/components/header';
+import about from '@/components/about';
+import contact from '@/components/contact';
+import resume from '@/components/resume';
+import imageParallax from '@/components/imageParallax';
 export default {
     name: 'landing',
     components: {
-        enHeader: header
+        enHeader,
+        about,
+        contact,
+        resume,
+        imageParallax
     },
     data() {
         return {};
