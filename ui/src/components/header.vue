@@ -4,7 +4,7 @@
       <v-layout row align-center>
         <v-flex text-xs-center>
           <div class="en-title">Developer.</div>
-          <div class="subtext">sub text</div>
+          <div class="subtext"></div>
         </v-flex>
       </v-layout>
     </v-parallax>
@@ -24,9 +24,6 @@ export default {
   @import url('https://fonts.googleapis.com/css?family=Titillium+Web');
 
 #header {
-  background: url("https://assets.enpfeff.com/background-2.jpg");
-  background-size: cover;
-  /*max-height: 700px;*/
   height: 500px;
   width: 100%;
 }
